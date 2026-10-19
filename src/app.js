@@ -24,6 +24,11 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(attachUser);
 
+// The API lives under /api; the bare root just says so instead of returning a 404.
+app.get('/', (_req, res) =>
+  res.json({ service: 'VOID. demo API', status: 'ok', health: '/api/health', products: '/api/products' })
+);
+
 app.get('/api/health', (_req, res) =>
   res.json({ ok: true, service: 'ecomm-demo-backend', time: new Date().toISOString() })
 );
