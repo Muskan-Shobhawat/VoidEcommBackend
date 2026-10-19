@@ -1,0 +1,20 @@
+# Render Blueprint: New + → Blueprint → pick this repo. Render then asks for the `sync: false` values.
+services:
+  - type: web
+    name: void-ecomm-backend
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # Your Vercel URL(s), comma-separated; `*` matches preview deploys,
+      # e.g. https://void-ecomm-frontend.vercel.app,https://void-ecomm-frontend-*.vercel.app
+      - key: CLIENT_ORIGIN
+        sync: false
+      # Optional: leave empty to serve the in-memory demo data.
+      - key: MONGODB_URI
+        sync: false

@@ -36,3 +36,11 @@ npm run dev        # http://localhost:5001  (5000 is used by macOS AirPlay)
 🔒 = needs `Authorization: Bearer <token>`. Accounts and sessions live in memory (passwords hashed with scrypt) and reset on restart.
 A demo account is seeded on start with two past orders: **demo@void.shop / void1234**.
 `CLIENT_ORIGIN` must include the frontend's origin (e.g. `http://localhost:3001`) for browser calls such as login.
+
+## Deploy (Render)
+
+1. Render → **New + → Blueprint** → connect `VoidEcommBackend`. `render.yaml` sets up a free Node web service (`npm ci` / `npm start`, health check `/api/health`).
+2. When asked, set `CLIENT_ORIGIN` to the Vercel URL(s), e.g. `https://void-ecomm-frontend.vercel.app,https://void-ecomm-frontend-*.vercel.app`. Leave `MONGODB_URI` empty for the demo data.
+3. The API is then at `https://<service>.onrender.com/api` — use that as the frontend's `NEXT_PUBLIC_API_URL`.
+
+Free instances sleep after ~15 min idle and take ~30–60 s to wake; the in-memory accounts and orders reset whenever it sleeps or redeploys (the demo account is recreated). The frontend pings `/api/health` on load to start waking it and falls back to its bundled data meanwhile.

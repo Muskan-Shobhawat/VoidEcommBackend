@@ -12,9 +12,12 @@ import { notFound, errorHandler } from './middleware/error.js';
 
 const app = express();
 
+// Comma-separated origins; `*` is a wildcard, e.g. https://void-ecomm-*.vercel.app for Vercel preview deploys.
 const origins = (process.env.CLIENT_ORIGIN || 'http://localhost:3000')
   .split(',')
-  .map((o) => o.trim());
+  .map((o) => o.trim())
+  .filter(Boolean)
+  .map((o) => (o.includes('*') ? new RegExp(`^${o.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '[a-z0-9-]*')}$`) : o));
 
 app.use(cors({ origin: origins, credentials: true }));
 app.use(express.json());
