@@ -1,9 +1,9 @@
 import products from '../data/products.js';
 import { HttpError } from '../middleware/error.js';
 
-const FREE_SHIPPING_THRESHOLD = 150;
-const SHIPPING_FLAT = 12;
-const TAX_RATE = 0.08;
+const FREE_SHIPPING_THRESHOLD = 2999;
+const SHIPPING_FLAT = 149;
+const TAX_RATE = 0.12; // GST on apparel
 
 /**
  * Stateless cart pricing: the client sends line items, server validates
@@ -36,7 +36,7 @@ export function priceCart(items = []) {
 
   const subtotal = +lines.reduce((s, l) => s + l.lineTotal, 0).toFixed(2);
   const shipping = subtotal === 0 || subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FLAT;
-  const tax = +(subtotal * TAX_RATE).toFixed(2);
+  const tax = Math.round(subtotal * TAX_RATE);
   const total = +(subtotal + shipping + tax).toFixed(2);
 
   return {
@@ -46,7 +46,7 @@ export function priceCart(items = []) {
       shipping,
       tax,
       total,
-      currency: 'USD',
+      currency: 'INR',
       freeShippingThreshold: FREE_SHIPPING_THRESHOLD,
       itemCount: lines.reduce((s, l) => s + l.quantity, 0),
     },

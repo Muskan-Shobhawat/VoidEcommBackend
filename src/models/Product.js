@@ -18,7 +18,7 @@ const ProductSchema = new mongoose.Schema(
     },
     price: { type: Number, required: true },
     compareAtPrice: Number,
-    currency: { type: String, default: 'USD' },
+    currency: { type: String, default: 'INR' },
     colors: [ColorSchema],
     palette: [String],
     sizes: [String],
